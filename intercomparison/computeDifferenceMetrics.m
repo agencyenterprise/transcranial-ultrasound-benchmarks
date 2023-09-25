@@ -176,9 +176,13 @@ if Nz == 1
 end
 
 % difference in peak pressure within the masked area
+metrics.max_amp_field1 = mx1;
+metrics.max_amp_field2 = mx2;
 metrics.max_amp_perc = 100 * abs(mx1 - mx2) / abs(mx1);
 
 % difference in the position of the peak
+metrics.max_pos_m_field1 = ps1;
+metrics.max_pos_m_field2 = ps2;
 metrics.max_pos_mm = 1e3 * dx * norm(ps1 - ps2, 2);
 
 % axial and lateral profiles through the peak (always using the
@@ -195,11 +199,21 @@ field2_focal_size_3dB_y = fwhm2(field2_profile_y.^2, dx, ps2(2), plot_fwhm);
 field1_focal_size_6dB_y = fwhm2(field1_profile_y, dx, ps1(2), plot_fwhm);
 field2_focal_size_6dB_y = fwhm2(field2_profile_y, dx, ps2(2), plot_fwhm);
 
+metrics.focal_size_3dB_y_m_field1 = field1_focal_size_3dB_y;
+metrics.focal_size_3dB_y_m_field2 = field2_focal_size_3dB_y;
+metrics.focal_size_6dB_y_m_field1 = field1_focal_size_6dB_y;
+metrics.focal_size_6dB_y_m_field2 = field2_focal_size_6dB_y;
+
 metrics.focal_size_3dB_y_mm = 1e3 * (field1_focal_size_3dB_y - field2_focal_size_3dB_y);
 metrics.focal_size_6dB_y_mm = 1e3 * (field1_focal_size_6dB_y - field2_focal_size_6dB_y);
 
 % focal size x-direction
 if fixed_axial_distance
+    metrics.focal_size_3dB_x_m_field1 = nan;
+    metrics.focal_size_3dB_x_m_field2 = nan;
+    metrics.focal_size_6dB_x_m_field1 = nan;
+    metrics.focal_size_6dB_x_m_field2 = nan;
+    
     metrics.focal_size_3dB_x_mm = nan;
     metrics.focal_size_6dB_x_mm = nan;    
 else
@@ -209,12 +223,21 @@ else
     field1_focal_size_6dB_x = fwhm2(field1_profile_x, dx, ps1(1), plot_fwhm);
     field2_focal_size_6dB_x = fwhm2(field2_profile_x, dx, ps2(1), plot_fwhm);
     
+    metrics.focal_size_3dB_x_m_field1 = field1_focal_size_3dB_x;
+    metrics.focal_size_3dB_x_m_field2 = field2_focal_size_3dB_x;
+    metrics.focal_size_6dB_x_m_field1 = field1_focal_size_6dB_x;
+    metrics.focal_size_6dB_x_m_field2 = field2_focal_size_6dB_x;
+    
     metrics.focal_size_3dB_x_mm = 1e3 * (field1_focal_size_3dB_x - field2_focal_size_3dB_x);
-    metrics.focal_size_6dB_x_mm = 1e3 * (field1_focal_size_6dB_x - field2_focal_size_6dB_x);    
+    metrics.focal_size_6dB_x_mm = 1e3 * (field1_focal_size_6dB_x - field2_focal_size_6dB_x);
 end
 
 % focal size z-direction
 if Nz == 1
+    metrics.focal_size_3dB_z_m_field1 = nan;
+    metrics.focal_size_3dB_z_m_field2 = nan;
+    metrics.focal_size_6dB_z_m_field1 = nan;
+    metrics.focal_size_6dB_z_m_field2 = nan;
     metrics.focal_size_3dB_z_mm = nan;
     metrics.focal_size_6dB_z_mm = nan;
 else
@@ -226,8 +249,13 @@ else
     
     field1_focal_size_6dB_z = fwhm2(field1_profile_z, dx, ps1(3), plot_fwhm);
     field2_focal_size_6dB_z = fwhm2(field2_profile_z, dx, ps2(3), plot_fwhm);
-   
-    metrics.focal_size_3dB_z_mm = 1e3 * (field1_focal_size_3dB_z - field2_focal_size_3dB_z);    
+    
+    metrics.focal_size_3dB_z_m_field1 = field1_focal_size_3dB_z;
+    metrics.focal_size_3dB_z_m_field2 = field2_focal_size_3dB_z;
+    metrics.focal_size_6dB_z_m_field1 = field1_focal_size_6dB_z;
+    metrics.focal_size_6dB_z_m_field2 = field2_focal_size_6dB_z;
+    
+    metrics.focal_size_3dB_z_mm = 1e3 * (field1_focal_size_3dB_z - field2_focal_size_3dB_z);
     metrics.focal_size_6dB_z_mm = 1e3 * (field1_focal_size_6dB_z - field2_focal_size_6dB_z);
 
 end
@@ -238,6 +266,7 @@ if compute_volume_metrics
     CC = bwconncomp(field1_masked > 0.5 * max(field1_masked(:)));
     numPixels = cellfun(@numel, CC.PixelIdxList);
     [num_vox_focal_volume1, idx] = max(numPixels);
+    metrics.focal_volume_num_vox_field1 = num_vox_focal_volume1;
     focal_volume1 = zeros(size(field1));
     focal_volume1(CC.PixelIdxList{idx}) = 1;
 
@@ -245,6 +274,7 @@ if compute_volume_metrics
     CC = bwconncomp(field2_masked > 0.5 * max(field2_masked(:)));
     numPixels = cellfun(@numel, CC.PixelIdxList);
     [num_vox_focal_volume2, idx] = max(numPixels);
+    metrics.focal_volume_num_vox_field2 = num_vox_focal_volume2;
     focal_volume2 = zeros(size(field1));
     focal_volume2(CC.PixelIdxList{idx}) = 1;
 
