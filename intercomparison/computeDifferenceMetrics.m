@@ -199,6 +199,9 @@ field2_focal_size_3dB_y = fwhm2(field2_profile_y.^2, dx, ps2(2), plot_fwhm);
 field1_focal_size_6dB_y = fwhm2(field1_profile_y, dx, ps1(2), plot_fwhm);
 field2_focal_size_6dB_y = fwhm2(field2_profile_y, dx, ps2(2), plot_fwhm);
 
+% Get focal size in indices by setting dx=1
+metrics.FWHM_y_field1 = fwhm2(field1_profile_y, 1, ps1(2), plot_fwhm);
+metrics.FWHM_y_field2 = fwhm2(field2_profile_y, 1, ps2(2), plot_fwhm);
 metrics.focal_size_3dB_y_m_field1 = field1_focal_size_3dB_y;
 metrics.focal_size_3dB_y_m_field2 = field2_focal_size_3dB_y;
 metrics.focal_size_6dB_y_m_field1 = field1_focal_size_6dB_y;
@@ -209,6 +212,8 @@ metrics.focal_size_6dB_y_mm = 1e3 * (field1_focal_size_6dB_y - field2_focal_size
 
 % focal size x-direction
 if fixed_axial_distance
+    metrics.FWHM_x_field1 = nan;
+    metrics.FWHM_x_field2 = nan;
     metrics.focal_size_3dB_x_m_field1 = nan;
     metrics.focal_size_3dB_x_m_field2 = nan;
     metrics.focal_size_6dB_x_m_field1 = nan;
@@ -223,6 +228,8 @@ else
     field1_focal_size_6dB_x = fwhm2(field1_profile_x, dx, ps1(1), plot_fwhm);
     field2_focal_size_6dB_x = fwhm2(field2_profile_x, dx, ps2(1), plot_fwhm);
     
+    metrics.FWHM_x_field1 = fwhm2(field1_profile_x, 1, ps1(1), plot_fwhm);
+    metrics.FWHM_x_field2 = fwhm2(field2_profile_x, 1, ps2(1), plot_fwhm);
     metrics.focal_size_3dB_x_m_field1 = field1_focal_size_3dB_x;
     metrics.focal_size_3dB_x_m_field2 = field2_focal_size_3dB_x;
     metrics.focal_size_6dB_x_m_field1 = field1_focal_size_6dB_x;
@@ -234,6 +241,8 @@ end
 
 % focal size z-direction
 if Nz == 1
+    metrics.FWHM_z_field1 = nan;
+    metrics.FWHM_z_field2 = nan;
     metrics.focal_size_3dB_z_m_field1 = nan;
     metrics.focal_size_3dB_z_m_field2 = nan;
     metrics.focal_size_6dB_z_m_field1 = nan;
@@ -250,6 +259,8 @@ else
     field1_focal_size_6dB_z = fwhm2(field1_profile_z, dx, ps1(3), plot_fwhm);
     field2_focal_size_6dB_z = fwhm2(field2_profile_z, dx, ps2(3), plot_fwhm);
     
+    metrics.FWHM_z_field1 = fwhm2(field1_profile_z, 1, ps1(3), plot_fwhm);
+    metrics.FWHM_z_field2 = fwhm2(field2_profile_z, 1, ps2(3), plot_fwhm);
     metrics.focal_size_3dB_z_m_field1 = field1_focal_size_3dB_z;
     metrics.focal_size_3dB_z_m_field2 = field2_focal_size_3dB_z;
     metrics.focal_size_6dB_z_m_field1 = field1_focal_size_6dB_z;
